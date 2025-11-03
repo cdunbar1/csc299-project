@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "description": "Define AI Agent Logic",
+        "status": "DONE",
+        "priority": "HIGH",
+        "due_date": "2025-11-10",
+        "linked_note_id": null
+    },
+    {
+        "id": 2,
+        "description": "Write second README draft",
+        "status": "TODO",
+        "priority": "LOW",
+        "due_date": null,
+        "linked_note_id": null
+    }
+]
