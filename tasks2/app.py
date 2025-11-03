@@ -6,6 +6,8 @@ from datetime import datetime
 # --- CONFIGURATION ---
 TASKS_FILE = 'tasks.json'
 NOTES_FILE = 'notes.json'
+# NOTE: For this project iteration, we will use a MOCK_LLM_RESPONSE 
+# instead of making a real API call.
 
 # --- FILE HANDLING FUNCTIONS ---
 
@@ -24,7 +26,7 @@ def save_data(filename, data):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
 
-# --- TASK MANAGEMENT FUNCTIONS (Expanded) ---
+# --- TASK MANAGEMENT FUNCTIONS ---
 
 def handle_task_add(tasks, args):
     """Adds a new task with priority and due date."""
@@ -90,7 +92,7 @@ def handle_task_done(tasks, args):
     print(f"Error: Task ID {task_id} not found.")
 
 
-# --- KNOWLEDGE MANAGEMENT FUNCTIONS (NEW) ---
+# --- KNOWLEDGE MANAGEMENT FUNCTIONS ---
 
 def handle_note_add(notes, args):
     """Adds a new knowledge note (PKMS item)."""
@@ -117,17 +119,51 @@ def handle_note_list(notes, args):
     print("-----------------------")
 
 
+# --- AI AGENT FUNCTIONS ---
+
+def handle_agent_suggest(tasks, notes):
+    """
+    MOCK AI AGENT: Analyzes tasks and notes to provide a smart suggestion.
+    In a real system, this would call a Gemini/Claude/etc. API.
+    """
+    print("\n--- AI Contextual Planner Agent ---")
+    
+    # 1. Identify high-priority, incomplete tasks
+    critical_tasks = [t for t in tasks if t['priority'] == 'HIGH' and t['status'] != 'DONE']
+    
+    if not critical_tasks:
+        print("All critical tasks are complete. Focus on MEDIUM priority or add new tasks.")
+        return
+        
+    # 2. Select the most critical task (e.g., the one with the earliest due date, or just the first one)
+    target_task = critical_tasks[0]
+    
+    # 3. Find any linked knowledge (Mocking the linked data, since linking wasn't implemented yet)
+    MOCK_LLM_RESPONSE = f"""
+    Based on Task ID {target_task['id']} ('{target_task['description']}') which is due soon, 
+    the best next step is to **Structure the `agent suggest` function and implement the core mocking logic**. 
+    
+    *Self-Correction: Note that the tasks are not explicitly linked to knowledge yet, so the immediate next task is implementation.*
+    """
+    
+    # In a real scenario, the LLM API call would happen here.
+    print(f"Analyzing {len(critical_tasks)} critical tasks and {len(notes)} notes...")
+    print("\n[AGENT SUGGESTION]")
+    print(MOCK_LLM_RESPONSE.strip())
+    print("\n-----------------------------------")
+
+
 # --- ARGPARSE SETUP (Refactored for Nested Commands) ---
 
 def setup_parser():
     parser = argparse.ArgumentParser(
         description="Integrated PKMS and Task Manager (Tasks2 Iteration)"
     )
-    # The top-level commands are 'task' and 'note'
+    # The top-level commands are 'task', 'note', and 'agent'
     main_subparsers = parser.add_subparsers(dest="main_command", required=True)
 
     # ----------------------------------------------------
-    # 1. TASK TOP-LEVEL COMMAND
+    # 1. TASK TOP-LEVEL COMMAND 
     # ----------------------------------------------------
     task_parser = main_subparsers.add_parser("task", help="Manage tasks (todos).")
     task_subparsers = task_parser.add_subparsers(dest="task_command", required=True)
@@ -151,7 +187,7 @@ def setup_parser():
     parser_task_done.set_defaults(func=handle_task_done)
 
     # ----------------------------------------------------
-    # 2. NOTE TOP-LEVEL COMMAND (PKMS)
+    # 2. NOTE TOP-LEVEL COMMAND (PKMS) 
     # ----------------------------------------------------
     note_parser = main_subparsers.add_parser("note", help="Manage knowledge notes (PKMS).")
     note_subparsers = note_parser.add_subparsers(dest="note_command", required=True)
@@ -166,24 +202,35 @@ def setup_parser():
     parser_note_list = note_subparsers.add_parser("list", help="List all note titles.")
     parser_note_list.set_defaults(func=handle_note_list)
     
-    # We will add the AI Agent command later
-    
+    # ----------------------------------------------------
+    # 3. AGENT TOP-LEVEL COMMAND
+    # ----------------------------------------------------
+    agent_parser = main_subparsers.add_parser("agent", help="Run AI-powered analysis and planning steps.")
+    agent_subparsers = agent_parser.add_subparsers(dest="agent_command", required=True)
+
+    # agent suggest (The AI logic)
+    parser_agent_suggest = agent_subparsers.add_parser("suggest", help="Get AI suggestion for the next highest-priority action.")
+    # Note: We use a lambda to pass the tasks and notes data into the handler function
+    parser_agent_suggest.set_defaults(func=lambda tasks, notes, args: handle_agent_suggest(tasks, notes))
+
     return parser
 
 def main():
     parser = setup_parser()
     args = parser.parse_args()
     
-    # Determine which data files to load based on the top-level command
+    # Load all data needed for the entire system
     tasks = load_data(TASKS_FILE)
     notes = load_data(NOTES_FILE)
     
     # Dispatch the call to the appropriate handler function
     if args.main_command == 'task':
-        # The function was set in set_defaults (e.g., handle_task_add)
         args.func(tasks, args)
     elif args.main_command == 'note':
         args.func(notes, args)
+    elif args.main_command == 'agent':
+        # The agent handler needs both tasks and notes lists
+        args.func(tasks, notes, args)
 
 if __name__ == "__main__":
     main()

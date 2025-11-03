@@ -895,3 +895,8 @@ this is what my README file says, is it fine (I provided the tasks2 draft README
 ### Assistant
 
 The README.md is very good. I suggest clarifying the "How to Run" section to explicitly state the non-interactive CLI format (python app.py <main_command> <sub_command>), which reinforces the fix from the previous step.
+
+### User
+
+can you help me add the agent command to my existing setup_parser function?
+
