@@ -1,5 +1,6 @@
 import json
 import os
+import argparse
 
 TASKS_FILE = 'tasks.json'
 
@@ -46,33 +47,36 @@ def search_tasks(tasks, keyword):
         print(f"{task['id']}. {status} {task['description']}")
     print("-----------------------------------")
 
+def setup_parser():
+    """Sets up the argument parser with subcommands for add, list, and search."""
+    parser = argparse.ArgumentParser(description="Terminal Task Manager (TTM)")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # 1. ADD Subcommand
+    parser_add = subparsers.add_parser("add", help="Add a new task.")
+    parser_add.add_argument("description", type=str, help="The description of the new task.")
+
+    # 2. LIST Subcommand
+    subparsers.add_parser("list", help="List all current tasks.")
+
+    # 3. SEARCH Subcommand
+    parser_search = subparsers.add_parser("search", help="Search tasks by keyword.")
+    parser_search.add_argument("keyword", type=str, help="The keyword to search for in task descriptions.")
+
+    return parser
+
 def main():
-    """Main function to run the task manager application."""
-    tasks = load_tasks()
+    """Parses arguments and calls the appropriate task function once."""
+    parser = setup_parser()
+    args = parser.parse_args()
+    tasks= load_tasks()
 
-    print("Welcome to your Task Manager!")
-    while True:
-        print("\nCommands: add <description>, list, search <keyword>, quit")
-        command = input("Enter command: ").strip().lower()
-        parts = command.split(' ', 1) # Split only on the first space
-
-        if parts[0] == 'add':
-            if len(parts) > 1:
-                add_task(tasks, parts[1])
-            else:
-                print("Usage: add <description>")
-        elif parts[0] == 'list':
-            list_tasks(tasks)
-        elif parts[0] == 'search':
-            if len(parts) > 1:
-                search_tasks(tasks, parts[1])
-            else:
-                print("Usage: search <keyword>")
-        elif parts[0] == 'quit':
-            print("Exiting Task Manager. Goodbye!")
-            break
-        else:
-            print("Unknown command. Please try again.")
+    if args.command == "add":
+        add_task(tasks, args.description)
+    elif args.command == "list":
+        list_tasks(tasks)
+    elif args.command == "search":
+        search_tasks(tasks, args.keyword)
 
 if __name__ == "__main__":
     main()
