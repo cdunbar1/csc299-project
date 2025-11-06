@@ -1,9 +1,13 @@
-# boilerplate function
-def inc(n: int) -> int:
-    return n+1
+# tasks3/src/tasks3/__init__.py
+from .app import main as app_main # Import the main function from app.py
 
+def inc(n: int) -> int:
+    return n + 1
+
+# This is the entry point that uv run tasks3 calls
 def main() -> None:
-    print("Hello from tasks3!")
+    # We call the main logic imported from app.py
+    app_main() 
 
 if __name__ == "__main__":
     main()
