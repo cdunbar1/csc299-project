@@ -1,5 +1,5 @@
 # tasks3/src/tasks3/__init__.py
-from .app import main as app_main # Import the main function from app.py
+from .app import main as app_main 
 
 def inc(n: int) -> int:
     return n + 1

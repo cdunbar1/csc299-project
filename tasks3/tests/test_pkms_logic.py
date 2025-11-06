@@ -2,13 +2,12 @@
 from tasks3.app import handle_task_add, handle_task_done 
 from unittest.mock import MagicMock
 
-# The handle_task_add function modifies a list in-place and calls save_data.
-# We must mock save_data to stop it from touching the disk.
+MOCK_MODULE_PATH = 'tasks3.app'
 
-def test_add_task_structure_and_id(mocker):
+def test_add_task_structure_and_id(mocker): # <-- FAILED DUE TO MISSING FIXTURE/MOCKER
     """Test that handle_task_add correctly increments ID and sets defaults."""
     # 1. Mock the save_data function to prevent writing to disk
-    mocker.patch('tasks3.src.app.save_data')
+    mocker.patch(f'{MOCK_MODULE_PATH}.save_data')
     
     mock_tasks = [{'id': 1, 'description': 'Existing task', 'status': 'TODO'}]
     mock_args = MagicMock(description="Test task", priority='high', due_date='2025-12-01')
@@ -20,10 +19,10 @@ def test_add_task_structure_and_id(mocker):
     assert mock_tasks[-1]['id'] == 2
     assert mock_tasks[-1]['priority'] == 'HIGH'
 
-def test_task_done_status_update(mocker):
+def test_task_done_status_update(mocker): # <-- FAILED DUE TO MISSING FIXTURE/MOCKER
     """Test that handle_task_done correctly sets status to 'DONE'."""
     # 1. Mock the save_data function to prevent writing to disk
-    mocker.patch('tasks3.src.app.save_data')
+    mocker.patch(f'{MOCK_MODULE_PATH}.save_data')
     
     # 2. Setup task list with one task to be completed (ID 5)
     mock_tasks = [{'id': 5, 'description': 'To be completed', 'status': 'TODO'}]
