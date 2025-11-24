@@ -1,0 +1,17 @@
+# Project Title: AI-PKMS-CLI
+
+## 1. Introduction and Initial Planning
+
+My inital goal for this project was to create a portable Python client application that combined a PKMS and a Task Manager. Both of these functions would be used with an integrated simple AI agent. I got the AI agent from downloading the package `openai`. I used AI chatbot assistance through a generic webpage, and my main use was with Google Gemini. I asked Gemini for help with initial brainstorming and helping with specific errors/modifications for my prototypes and project. One key decision I made was choosing to use SQLite for storage due to its support in specifically Python, and it has great portability across Windows, OSX, and Linux. Using SQLite avoided the complexity of Neo4J or raw JSON file managment. The framework I chose was Python's built-in cmd module for quick terminal interaction.
+
+## 2. Development Phase
+
+I started my prototyping with AI assistance from GitHub Copilot (Inline Suggestions) and Google Gemini (Code Snippets and Debugging). 
+
+What worked for me was my Database Class, CLI Framework, and secure API key handling. For my database class (`Database Manager`), I used AI assitance to generate the initial SQL table creation statements (`create table if not exists...`) and the template for all CRUD operations. Doing this helped me speed up the setup steps. The result from this was the separation of the DatabaseManager class helped make the code clean and eaasy to test. For the CLI framework (`cmd.Cmd`), I used AI assistance (Copilot) to auto-complete the boilerplate for `do_***` methods and the `help_***` documentation strings. Doing this ensured that standard Python CLI conventions were followed. Finally, I used AI assitance for how to initialize the `openai.OpenAI()` client to automatically read the `OPENAI_API_KEY` environment variable. 
+
+What did not work was my initial plan for my AI agent, input handling in CLI, and the SQLite row factory. For my initial plan, I planned for a complex AI feature like cross-referencing knowledge and tasks. However, the initial implementation was causing too many API errors and required a LOT of unnecessary prompting. I then went with the teacher-suggested simple Task Summarization (`ai_summarize_task`), which turned out to be more stable and met the requirements I needed. For the input handling, I had to debug alot because of the issues with the cmd module and multiline input, but AI assistance helped me find the correct pattern to handle multi-line text input (looping `input()` until a 'END'). Debugging for SQLite row factory included having to change the results that were returned as tuples (1, 'Task 1', 'Pending'), which made column access difficult. The solution for this was using Github Copilot's inline suggestion to add `conn.row_factory = sqlite3.Row`, and this allowed the application to access data by column name and made reading the code much easier.
+
+## 3. Testing and Finalization
+
+For testing, I used the AI assistant's code snippets and basic structure to add simple Python `unittest` code for the `DatabaseManager` class. I maintained a fine-grained commit history to clearly show the iterative development process that went from the initial data structure to the final AI integration. This showed that the solution was developed through structured steps rather than a single generation.
