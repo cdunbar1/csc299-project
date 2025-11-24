@@ -1,0 +1,27 @@
+[Insert YouTube URL Here]
+
+Video Content Requirements (6-8 minutes):
+
+1. Introduction: I state the project goal (AI-PKMS-CLI) and the core technology stack (Python, SQLite, OpenAI).
+
+2. Development Process Summary: I briefly discuss the iterative process (prototyping -> 
+specification -> final code) and the critical role of AI tools (e.g., "Copilot helped with boilerplate, and Gemini 
+helped debug the SQLite connection logic").
+
+3. Software Demonstration:
+
+- I show the application running from the terminal after setting the OPENAI_API_KEY.
+
+- I demonstrate core functionality by: add_task, list_tasks, add_note (with multiline input), and search_notes.
+
+- I show crucial AI Agent Demo: Show the ai_summarize_task <id> command, and explain how the code retrieves the task and sends only the description to the AI via the secure environment variable setup.
+
+4. Code/Structure Review: I briefly walk through the pkms_cli.py file, highlighting:
+
+- The DatabaseManager class and the SQLite schema.
+
+- The AIAgent class and how it initializes the OpenAI() client without hardcoding the key.
+
+- The structure of the PKMSApp using cmd.Cmd.
+
+5. Conclusion: My final remarks on portability and successful completion.
