@@ -116,5 +116,5 @@ class TestDatabaseManager(unittest.TestCase):
 # 2. Run from the terminal: python -m unittest test_pkms.py
 
 if __name__ == '__main__':
-    # Run the tests
+    
     unittest.main()
